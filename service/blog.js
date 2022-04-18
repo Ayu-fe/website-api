@@ -12,6 +12,19 @@ const getBlogList = () => {
   })
 }
 
+const getBlogById = (id) => {
+  return new Promise((resolve, reject) => {
+    connect.query(`SELECT * FROM blog WHERE id = ${id};`, (err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result[0] || {})
+      }
+    })
+  })
+}
+
 module.exports = {
-  getBlogList
+  getBlogList,
+  getBlogById
 }
