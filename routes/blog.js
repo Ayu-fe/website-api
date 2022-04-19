@@ -1,7 +1,12 @@
 const express = require("express");
-const router = express.Router();
-const { getBlogList, getBlogById } = require("../service/blog");
+const multer = require('multer') // v1.0.5
+const { getBlogList, getBlogById, addBlog } = require("../service/blog");
 const { returnContorller } = require("../utils/index");
+
+
+
+const router = express.Router();
+const upload = multer()
 
 router.get("/list", function (req, res, next) {
   getBlogList().then(
@@ -25,5 +30,16 @@ router.get("/content", function (req, res, next) {
     }
   );
 });
+
+router.post("/add", upload.array(), function (req, res) {
+  addBlog(req.body).then(
+    (data) => {
+      returnContorller(res, 200, data, "ok");
+    },
+    (err) => {
+      returnContorller(res, 500, err, "服务器内部错误");
+    }
+  );
+})
 
 module.exports = router;
